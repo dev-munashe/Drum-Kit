@@ -1,43 +1,81 @@
+var numberOfDrumButtons = document.querySelectorAll(".drum").length;
 
-var buttonColours = ["red", "blue", "green", "yellow"];
+for (var i = 0; i < numberOfDrumButtons; i++) {
 
-var gamePattern = [];
-var userClickedPattern = [];
+  document.querySelectorAll(".drum")[i].addEventListener("click", function() {
 
-$(".btn").click(function() {
+    var buttonInnerHTML = this.innerHTML;
 
-  var userChosenColour = $(this).attr("id");
-  userClickedPattern.push(userChosenColour);
+    makeSound(buttonInnerHTML);
 
-  playSound(userChosenColour);
+    buttonAnimation(buttonInnerHTML);
 
-  animatePress(userChosenColour);
+  });
+
+}
+
+document.addEventListener("keypress", function(event) {
+
+  makeSound(event.key);
+
+  buttonAnimation(event.key);
+
 });
 
-function nextSequence() {
 
-  var randomNumber = Math.floor(Math.random() * 4);
-  var randomChosenColour = buttonColours[randomNumber];
-  gamePattern.push(randomChosenColour);
+function makeSound(key) {
 
-  $("#" + randomChosenColour).fadeIn(100).fadeOut(100).fadeIn(100);
+  switch (key) {
+    case "w":
+      var tom1 = new Audio("sounds/tom-1.mp3");
+      tom1.play();
+      break;
 
-  playSound(randomChosenColour);
+    case "a":
+      var tom2 = new Audio("sounds/tom-2.mp3");
+      tom2.play();
+      break;
+
+    case "s":
+      var tom3 = new Audio('sounds/tom-3.mp3');
+      tom3.play();
+      break;
+
+    case "d":
+      var tom4 = new Audio('sounds/tom-4.mp3');
+      tom4.play();
+      break;
+
+    case "j":
+      var snare = new Audio('sounds/snare.mp3');
+      snare.play();
+      break;
+
+    case "k":
+      var crash = new Audio('sounds/crash.mp3');
+      crash.play();
+      break;
+
+    case "l":
+      var kick = new Audio('sounds/kick-bass.mp3');
+      kick.play();
+      break;
+
+
+    default: console.log(key);
+
+  }
 }
 
-function playSound(name) {
-  var audio = new Audio("sounds/" + name + ".mp3");
-  audio.play();
-}
 
-//1. Create a new function called animatePress(), it should take a single input parameter called currentColour.
-function animatePress(currentColor) {
+function buttonAnimation(currentKey) {
 
-  //2. Use jQuery to add this pressed class to the button that gets clicked inside animatePress().
-  $("#" + currentColor).addClass("pressed");
+  var activeButton = document.querySelector("." + currentKey);
 
-  //3. use Google/Stackoverflow to figure out how you can use Javascript to remove the pressed class after a 100 milliseconds.
-  setTimeout(function () {
-    $("#" + currentColor).removeClass("pressed");
+  activeButton.classList.add("pressed");
+
+  setTimeout(function() {
+    activeButton.classList.remove("pressed");
   }, 100);
+
 }
